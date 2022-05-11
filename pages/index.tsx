@@ -1,86 +1,146 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
+import type { GetServerSideProps, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
+import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
+import Button from '../components/Button'
+import vector from '../public/illustrations.svg'
+import Carousel from '../components/Carousel'
+import ProductsList from '../components/ProductsList'
+import { Product } from '../types'
+import axios from 'axios'
+import useNavHeight from '../hooks/useNavHeight'
 
-const Home: NextPage = () => {
+type Props = {
+  products: Product[]
+}
+const Home: NextPage<Props> = ({ products }) => {
+  const marginTop = useNavHeight().navHeight
+
+  const scrollElementIntoView = (element: any) => {
+    let scrollTop = window.pageYOffset || element.scrollTop
+
+    // Furthermore, if you have for example a header outside the iframe
+    // you need to factor in its dimensions when calculating the position to scroll to
+    const headerOutsideIframe = marginTop
+
+    const finalOffset =
+      element.getBoundingClientRect().top + scrollTop + headerOutsideIframe
+
+    window.parent.scrollTo({
+      top: finalOffset,
+      behavior: 'smooth' || 'auto',
+    })
+  }
+
+  useEffect(() => {
+    landingAnimation()
+  }, [])
+
+  const landingAnimation = () => {
+    var landing = document.getElementById('landing')
+    landing!.classList.remove('opacity-0')
+    landing!.classList.add('opacity-100')
+    var landingHeader = document.getElementById('landing-header')
+    landingHeader!.classList.add('bg-white')
+    var text = document.getElementById('h1')
+    text!.classList.remove('opacity-0')
+    text!.classList.add('opacity-100')
+    var btn = document.getElementById('btn')
+    btn!.classList.remove('opacity-0')
+    btn!.classList.add('opacity-100')
+    setTimeout(() => {
+      btn!.classList.remove('sm:delay-[3s]')
+      btn!.classList.remove('delay-[2s]')
+    }, 3000)
+  }
+
+  const carouselRef = useRef<HTMLDivElement>(null)
+
+  const scrollToCarousel = () => {
+    carouselRef.current?.scrollIntoView({ block: 'start', behavior: 'smooth' })
+  }
+
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+    <>
+      <div
+        className={
+          'relative flex h-screen w-screen items-center justify-center opacity-0 transition-opacity duration-1000 ease-linear sm:mb-8 sm:h-auto sm:flex-row-reverse sm:justify-start sm:duration-[2s] lg:mb-36 '
+        }
+        id="landing"
+      >
+        <div className="hidden sm:block">
+          <Image
+            src={vector}
+            alt="illustration background"
+            objectFit="contain"
+            height={550}
+            className="-z-30"
+            id="vector"
+            objectPosition={'right'}
+            priority
+            loading="eager"
+          />
         </div>
-      </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+        <header
+          className="absolute left-0 top-0 bottom-1/2 flex w-full flex-col items-center justify-center rounded-lg px-8 duration-300 ease-linear sm:top-[20%] sm:w-auto sm:pl-16 sm:delay-[2s] xl:pr-8 xl:pl-40"
+          id="landing-header"
         >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
-    </div>
+          <h1
+            className="mb-4 bg-white pb-2 text-[8vw] text-dark-blue opacity-0 transition-opacity duration-300 ease-linear sm:mb-0 sm:text-lg sm:delay-[2s] md:text-2xl md:leading-tight lg:pb-5 lg:text-4xl lg:leading-tight xl:text-5xl xl:leading-snug 2xl:text-7xl 2xl:leading-snug"
+            id="h1"
+          >
+            Your one stop smart <br />
+            shopping resource.
+          </h1>
+          <Button
+            secondary
+            className="w-full text-lg opacity-0 delay-[2s] sm:delay-[3s] md:text-base lg:py-1.5 lg:text-xl xl:text-2xl"
+            id={'btn'}
+            onClick={scrollToCarousel}
+          >
+            Explore
+          </Button>
+        </header>
+      </div>
+
+      <div
+        ref={carouselRef}
+        className="relative"
+        style={{ scrollMarginTop: `${marginTop}px` }}
+      >
+        <Carousel
+          // innerRef={carouselRef}
+          title="most popular products"
+        >
+          {ProductsList(products)}
+        </Carousel>
+        <Carousel
+          // innerRef={carouselRef}
+          title="most popular products"
+        >
+          {ProductsList(products)}
+        </Carousel>
+        <Carousel
+          // innerRef={carouselRef}
+          title="most popular products"
+        >
+          {ProductsList(products)}
+        </Carousel>
+      </div>
+      <h1 className=".js-show-on-scroll motion-safe:animate-fadeIn">
+        asdasdasdad
+      </h1>
+    </>
   )
 }
-
 export default Home
+
+export const getStaticProps: GetServerSideProps = async () => {
+  const res = await axios('https://fakestoreapi.com/products')
+  const products: Product[] = await res.data
+  console.log(products)
+  return {
+    props: {
+      products,
+    },
+  }
+}
