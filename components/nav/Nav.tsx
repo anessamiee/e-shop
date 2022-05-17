@@ -9,9 +9,11 @@ import Search from './Search'
 import axios from 'axios'
 import useNavHeight from '../../hooks/useNavHeight'
 import { useRouter } from 'next/router'
+import UserCard from './UserCard'
 
 const Nav: React.FC = () => {
   const [menu, setMenu] = useState<boolean>(false)
+  const [userCard, setUserCard] = useState(false)
   const [categories, setCategories] = useState<string[]>([])
   const navHeight = useNavHeight().navHeight
   // const fetch = async () => {
@@ -43,30 +45,48 @@ const Nav: React.FC = () => {
       liRef.current?.classList.remove('rotate-90')
     }
   }, [menu])
+  // const [lastScrollY, setLastScrollY] = useState(0)
 
   // useEffect(() => {
-  //   var prevScrollpos = window.pageYOffset;
-  //   window.onscroll = function() {
-  //     var currentScrollPos = window.pageYOffset;
-  //     if (prevScrollpos > currentScrollPos) {
-  //       // document.getElementById("navbar").style.top = "0";
-  //       navRef.current?.style.top = "0";
-  //     } else {
-  //       navRef.current?.style.top = "-250px";
-  //       // document.getElementById("navbar").style.top = "-50px";
+  //   const controlNavbar = () => {
+  //     var prevScrollpos = window.pageYOffset
+  //     window.onscroll = function () {
+  //       var currentScrollPos = window.pageYOffset
+  //       if (prevScrollpos > currentScrollPos) {
+  //         navRef.current?.classList.add('top-0')
+  //         navRef.current?.classList.remove('opacity-0')
+  //         navRef.current?.classList.add('opacity-100')
+  //         navRef.current?.classList.remove(`-top-[${navHeight}px]`)
+  //       } else {
+  //         navRef.current?.classList.remove('top-0')
+  //         navRef.current?.classList.add(`-top-[${navHeight}px]`)
+  //         navRef.current?.classList.remove('opacity-100')
+  //         navRef.current?.classList.add('opacity-0')
+  //       }
+  //       prevScrollpos = currentScrollPos
+  //       setLastScrollY(window.scrollY)
   //     }
-  //     prevScrollpos = currentScrollPos;
   //   }
-  // },[])
+
+  //   if (typeof window !== 'undefined') {
+  //     window.addEventListener('scroll', controlNavbar)
+  //     return () => {
+  //       window.removeEventListener('scroll', controlNavbar)
+  //     }
+  //   }
+  // }, [navHeight, lastScrollY])
 
   const handleMenu = () => {
     setMenu(!menu)
+  }
+  const handleUserCard = () => {
+    setUserCard(!userCard)
   }
   const router = useRouter()
   return (
     <>
       <nav
-        className="sticky top-0 z-20 flex w-full flex-col items-center justify-between gap-5 overflow-hidden bg-white px-8 py-12 sm:gap-10 sm:px-16"
+        className="transitio-all sticky top-0 z-20 flex w-full flex-col items-center justify-between gap-5 overflow-hidden bg-white px-8 py-12 opacity-100 transition-[top_3s] ease-linear sm:gap-10 sm:px-16"
         id={'navbar'}
         ref={navRef}
       >
@@ -80,20 +100,28 @@ const Nav: React.FC = () => {
           </Link>
           <Search mobile={false} />
           <ul className="flex items-center justify-end gap-5 sm:w-1/3 sm:gap-10">
-            <li>
-              <AiOutlineUser className="rounded-full text-3xl transition-all sm:text-4xl" />
+            <li id="user" className="">
+              <AiOutlineUser
+                className="rounded-full text-3xl transition-all sm:text-4xl"
+                onClick={handleUserCard}
+              />
+              {userCard && <UserCard login={true} />}
             </li>
-            <li>
+            <li id="cart">
               <div className="group relative">
                 <RiShoppingCart2Line className="relative text-3xl transition-all sm:text-4xl" />
                 {/* <RiShoppingCart2Fill className="absolute top-0 text-3xl opacity-0 transition-all group-hover:opacity-100 sm:text-4xl" /> */}
               </div>
             </li>
-            <li className="transition-all duration-300 ease-in-out" ref={liRef}>
+            <li
+              className="transition-all duration-300 ease-in-out"
+              ref={liRef}
+              id="menu"
+            >
               <BsList
                 className="text-3xl transition-all hover:text-blue sm:text-4xl"
                 onClick={handleMenu}
-                onMouseEnter={handleMenu}
+                // onMouseEnter={handleMenu}
               />
             </li>
           </ul>
@@ -102,7 +130,6 @@ const Nav: React.FC = () => {
       </nav>
       <div
         className="fixed right-0 h-screen w-full bg-white px-8 opacity-0 shadow-[0_60px_50px_-10px_rgb(0_0_0_/_0.15);] transition-all duration-100 ease-linear sm:h-1/2 sm:px-16 "
-        id="nav"
         onMouseLeave={() => setMenu(false)}
         ref={menuRef}
       >
