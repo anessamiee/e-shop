@@ -10,6 +10,7 @@ type Props = {
   id?: string | undefined
   onClick?: React.MouseEventHandler<HTMLAnchorElement> | undefined
   herf?: Url
+  scroll?: boolean
 }
 
 const Button: React.FC<Props> = ({
@@ -19,6 +20,7 @@ const Button: React.FC<Props> = ({
   id,
   onClick,
   herf,
+  scroll,
 }) => {
   const button =
     'w-full select-none rounded-[10px] py-1 text-center transition duration-[300] ease-linear active:bg-opacity-90 '
@@ -29,14 +31,14 @@ const Button: React.FC<Props> = ({
 
   const sec =
     button +
-    'border-[2.5px] border-blue bg-white hover:bg-blue hover:text-light-grey hover:shadow-[0px_2px_15px_rgba(69,93,122,0.6)] ' +
+    'border-[2.5px] border-blue bg-white hover:shadow-[0px_2px_15px_rgba(69,93,122,0.6)] ' +
     className
 
   return (
-    <Link href={`${herf !== undefined ? herf : '/'}`} scroll={false}>
+    <Link href={`${herf !== undefined ? herf : '/'}`} scroll={scroll}>
       <a
         role={'button'}
-        className={`${secondary ? sec : pri}` }
+        className={`${secondary ? sec : pri}`}
         id={id}
         onClick={onClick}
       >

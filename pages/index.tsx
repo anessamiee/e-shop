@@ -1,6 +1,6 @@
 import type { GetServerSideProps, GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
-import { ChangeEvent, RefObject, useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Button from '../components/Button'
 import vector from '../public/illustrations.svg'
 import Carousel from '../components/Carousel'
@@ -65,9 +65,10 @@ const Home: NextPage<Props> = ({ products }) => {
         className={
           'relative flex h-screen w-screen items-center justify-center opacity-0 transition-opacity duration-1000 ease-linear sm:mb-8 sm:h-auto sm:flex-row-reverse sm:justify-start sm:duration-[2s] lg:mb-36 '
         }
+        style={{}}
         id="landing"
       >
-        <div className="hidden sm:block">
+        <div className="hidden select-none sm:block">
           <Image
             src={vector}
             alt="illustration background"
@@ -85,7 +86,7 @@ const Home: NextPage<Props> = ({ products }) => {
           id="landing-header"
         >
           <h1
-            className="mb-4 bg-white pb-2 text-[8vw] text-dark-blue opacity-0 transition-opacity duration-300 ease-linear sm:mb-0 sm:text-lg sm:delay-[2s] md:text-2xl md:leading-tight lg:pb-5 lg:text-4xl lg:leading-tight xl:text-5xl xl:leading-snug 2xl:text-7xl 2xl:leading-snug"
+            className="mb-4 bg-white pb-2 text-[8vw] text-dark-blue opacity-0 transition-opacity duration-300 ease-linear selection:bg-dark-grey selection:text-light-grey sm:mb-0 sm:text-lg sm:delay-[2s] md:text-2xl md:leading-tight lg:pb-5 lg:text-4xl lg:leading-tight xl:text-5xl xl:leading-snug 2xl:text-7xl 2xl:leading-snug"
             id="h1"
           >
             Your one stop smart <br />
@@ -93,9 +94,10 @@ const Home: NextPage<Props> = ({ products }) => {
           </h1>
           <Button
             secondary
-            className="w-full text-lg opacity-0 delay-[2s] sm:delay-[3s] md:text-base lg:py-1.5 lg:text-xl xl:text-2xl"
+            className="w-full text-lg opacity-0 delay-[2s] hover:bg-blue hover:text-light-grey sm:delay-[3s] md:text-base lg:py-1.5 lg:text-xl xl:text-2xl"
             id={'btn'}
             onClick={scrollToCarousel}
+            scroll={false}
           >
             Explore
           </Button>
@@ -134,7 +136,7 @@ const Home: NextPage<Props> = ({ products }) => {
 }
 export default Home
 
-export const getStaticProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   const res = await axios('https://fakestoreapi.com/products')
   const products: Product[] = await res.data
   console.log(products)

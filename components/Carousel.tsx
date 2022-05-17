@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useRef } from 'react'
+import { useRef } from 'react'
 import Slider from 'react-slick'
-import ProductCard from './ProductCard'
 
 type Props = {
   innerRef?: React.RefObject<HTMLDivElement>
@@ -23,7 +22,7 @@ const Carousel: React.FC<Props> = ({ innerRef, title, children }) => {
   return (
     <>
       <h2
-        className="mx-8 text-center text-[7vw] capitalize text-dark-grey sm:mx-16 sm:text-left sm:text-3xl"
+        className="mx-8 text-center text-[7vw] capitalize sm:mx-16 sm:text-left sm:text-3xl"
         ref={innerRef}
       >
         {title}
@@ -35,7 +34,6 @@ const Carousel: React.FC<Props> = ({ innerRef, title, children }) => {
         adaptiveHeight={true}
         className={''}
         arrows={false}
-        // centerMode={true}
         draggable={true}
         pauseOnFocus={true}
         swipeToSlide={true}
@@ -47,11 +45,6 @@ const Carousel: React.FC<Props> = ({ innerRef, title, children }) => {
         ref={sliderRef}
       >
         {children}
-        {/* <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard /> */}
       </Slider>
     </>
   )

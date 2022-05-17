@@ -9,7 +9,7 @@ export default function Document() {
           rel="stylesheet"
         ></link>
       </Head>
-     <body className='text-dark-grey box-border' id='body'>
+      <body id="body">
         <Main />
         <NextScript />
       </body>

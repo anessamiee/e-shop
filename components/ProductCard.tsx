@@ -1,9 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { useCallback, useEffect, useState } from 'react'
-import bag from '../assets/bag.jpeg'
+import { useEffect, useState } from 'react'
 import Button from './Button'
-import { GetStaticProps } from 'next'
 import { Product } from '../types'
 import useWindowDimensions from '../hooks/useWindowDimensions'
 
@@ -40,7 +38,7 @@ const ProductCard: React.FC<Props> = ({ product }) => {
   return (
     <div className="group relative flex aspect-square flex-col items-center justify-between rounded-[10px] bg-white p-4 sm:aspect-[4/5] sm:p-10 sm:pb-10 md:pt-4">
       <div className="absolute top-0 -z-10 h-full w-full rounded-[10px] transition-all duration-500 ease-out sm:group-hover:animate-pulse sm:group-hover:shadow-[-20px_20px_40px_15px_#00000015]" />
-      <div className="w-4/6">{mobile ? imgLink : img}</div>
+      <div className="w-full">{mobile ? imgLink : img}</div>
       <div className="hidden w-full sm:block">
         <h3 className="mb-10 mt-5 w-full text-center text-base line-clamp-2">
           {product.title}
