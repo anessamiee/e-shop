@@ -1,17 +1,13 @@
-import { useRef } from 'react'
 import Slider from 'react-slick'
 
 type Props = {
-  innerRef?: React.RefObject<HTMLDivElement>
   scroll?: () => void | undefined
   title: string
   className?: string
   children?: React.ReactNode
 }
 
-const Carousel: React.FC<Props> = ({ innerRef, title, children }) => {
-  const sliderRef = useRef<Slider>(null)
-
+const Carousel: React.FC<Props> = ({ title, children }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -21,10 +17,7 @@ const Carousel: React.FC<Props> = ({ innerRef, title, children }) => {
   }
   return (
     <>
-      <h2
-        className="mx-8 text-center text-[7vw] capitalize sm:mx-16 sm:text-left sm:text-3xl"
-        ref={innerRef}
-      >
+      <h2 className="mx-8 text-center text-[7vw] capitalize sm:mx-16 sm:text-left sm:text-3xl">
         {title}
       </h2>
       <Slider
@@ -42,7 +35,6 @@ const Carousel: React.FC<Props> = ({ innerRef, title, children }) => {
         pauseOnHover={true}
         centerPadding="0px"
         pauseOnDotsHover={false}
-        ref={sliderRef}
       >
         {children}
       </Slider>

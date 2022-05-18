@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-
 import { AiOutlineUser } from 'react-icons/ai'
 import { BsList } from 'react-icons/bs'
 import { RiShoppingCart2Line } from 'react-icons/ri'
@@ -10,17 +9,15 @@ import axios from 'axios'
 import useNavHeight from '../../hooks/useNavHeight'
 import { useRouter } from 'next/router'
 import UserCard from './UserCard'
+import Pages from './Pages'
 
 const Nav: React.FC = () => {
   const [menu, setMenu] = useState<boolean>(false)
   const [userCard, setUserCard] = useState(false)
   const [categories, setCategories] = useState<string[]>([])
   const navHeight = useNavHeight().navHeight
-  // const fetch = async () => {
-  //  await axios('https://fakestoreapi.com/products/categories').then(res => setCategories(res.data))
-  //   // const cat: string[] = await res.data
-  //   // setCategories(cat)
-  // }
+  const router = useRouter()
+
   useEffect(() => {
     axios('https://fakestoreapi.com/products/categories').then((res) => {
       setCategories(res.data)
@@ -45,36 +42,6 @@ const Nav: React.FC = () => {
       liRef.current?.classList.remove('rotate-90')
     }
   }, [menu])
-  // const [lastScrollY, setLastScrollY] = useState(0)
-
-  // useEffect(() => {
-  //   const controlNavbar = () => {
-  //     var prevScrollpos = window.pageYOffset
-  //     window.onscroll = function () {
-  //       var currentScrollPos = window.pageYOffset
-  //       if (prevScrollpos > currentScrollPos) {
-  //         navRef.current?.classList.add('top-0')
-  //         navRef.current?.classList.remove('opacity-0')
-  //         navRef.current?.classList.add('opacity-100')
-  //         navRef.current?.classList.remove(`-top-[${navHeight}px]`)
-  //       } else {
-  //         navRef.current?.classList.remove('top-0')
-  //         navRef.current?.classList.add(`-top-[${navHeight}px]`)
-  //         navRef.current?.classList.remove('opacity-100')
-  //         navRef.current?.classList.add('opacity-0')
-  //       }
-  //       prevScrollpos = currentScrollPos
-  //       setLastScrollY(window.scrollY)
-  //     }
-  //   }
-
-  //   if (typeof window !== 'undefined') {
-  //     window.addEventListener('scroll', controlNavbar)
-  //     return () => {
-  //       window.removeEventListener('scroll', controlNavbar)
-  //     }
-  //   }
-  // }, [navHeight, lastScrollY])
 
   const handleMenu = () => {
     setMenu(!menu)
@@ -82,7 +49,10 @@ const Nav: React.FC = () => {
   const handleUserCard = () => {
     setUserCard(!userCard)
   }
-  const router = useRouter()
+  useEffect(() => {
+    router.events.on('routeChangeComplete', () => setUserCard(false))
+  }, [router.events])
+
   return (
     <>
       <nav
@@ -105,7 +75,7 @@ const Nav: React.FC = () => {
                 className="rounded-full text-3xl transition-all sm:text-4xl"
                 onClick={handleUserCard}
               />
-              {userCard && <UserCard login={true} />}
+              {userCard && <UserCard login={false} />}
             </li>
             <li id="cart">
               <div className="group relative">
@@ -129,33 +99,80 @@ const Nav: React.FC = () => {
         <Search mobile />
       </nav>
       <div
-        className="fixed right-0 h-screen w-full bg-white px-8 opacity-0 shadow-[0_60px_50px_-10px_rgb(0_0_0_/_0.15);] transition-all duration-100 ease-linear sm:h-1/2 sm:px-16 "
+        className="fixed right-0 flex h-screen w-full flex-col flex-wrap gap-5 bg-white px-8 opacity-0 shadow-[0_60px_50px_-10px_rgb(0_0_0_/_0.15);] transition-all duration-100 ease-linear sm:h-1/2 sm:flex-row sm:gap-0 sm:px-16 "
         onMouseLeave={() => setMenu(false)}
         ref={menuRef}
       >
-        <h2 className="flex items-center justify-between pb-4 text-3xl">
-          Categories
-        </h2>
-        <ul className="flex flex-col gap-2">
-          {categories.map((name, index) => (
-            <li
-              className="flex items-center justify-between text-xl capitalize"
-              key={index}
-            >
-              <Link href={`/products/category/${name}`}>
-                <a
-                  className="flex items-center justify-center"
-                  onClick={() =>
-                    router.events.on('routeChangeComplete', handleMenu)
-                  }
-                >
-                  {name}
-                  <BsArrowRightShort />
-                </a>
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div className="sm:w-1/2">
+          <h2 className="flex items-center justify-between pb-4 text-3xl">
+            Categories
+          </h2>
+          <ul className="flex flex-col gap-2">
+            {categories.map((name, index) => (
+              <li
+                className="flex items-center justify-between text-xl capitalize"
+                key={index}
+              >
+                <Link href={`/products/category/${name}`}>
+                  <a
+                    className="flex items-center justify-center"
+                    onClick={() =>
+                      router.events.on('routeChangeComplete', handleMenu)
+                    }
+                  >
+                    {name}
+                    <BsArrowRightShort />
+                  </a>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className=" text-xl sm:w-1/2">
+          <h2 className="flex items-center justify-between pb-4 text-3xl">
+            Pages
+          </h2>
+          <div>
+            <ul className="flex flex-col gap-2">
+              <li>
+                <Link href={'/about'}>
+                  <a
+                    className="hover:underline hover:drop-shadow-xl"
+                    onClick={() =>
+                      router.events.on('routeChangeComplete', handleMenu)
+                    }
+                  >
+                    About
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href={'/contact-us'}>
+                  <a
+                    className="hover:underline hover:drop-shadow-xl"
+                    onClick={() =>
+                      router.events.on('routeChangeComplete', handleMenu)
+                    }
+                  >
+                    Contact Us
+                  </a>
+                </Link>
+              </li>
+              <li>
+                <Link href={'/mockup'}>
+                  <a
+                    className="hover:underline hover:drop-shadow-xl"
+                    onClick={() =>
+                      router.events.on('routeChangeComplete', handleMenu)
+                    }
+                  >
+                    Mock Up Users
+                  </a>
+                </Link>
+              </li>
+            </ul>
+          </div>
+        </div>
       </div>
     </>
   )

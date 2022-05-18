@@ -1,13 +1,24 @@
-import { useEffect, useRef } from 'react'
+import { NextRouter, useRouter } from 'next/router'
+import { useEffect, useRef, useState } from 'react'
 import useWindowDimensions from '../../hooks/useWindowDimensions'
 
 type Props = {
   mobile?: boolean
 }
-
 const Search: React.FC<Props> = ({ mobile }) => {
-  var searchBox = useRef<HTMLInputElement>(null)
+  const [inputValue, setInputValue] = useState<string>('')
+  const searchBox = useRef<HTMLInputElement>(null)
   var width = useWindowDimensions().innerWidth
+  const router: NextRouter = useRouter()
+  useEffect(() => {
+    console.log(inputValue === '')
+    if (inputValue !== '') {
+      router.push({ pathname: '/search', query: { title: inputValue }})
+    } else {
+      router.push('/')
+    }
+  }, [inputValue])
+
   useEffect(() => {
     const handelVisiblity = () => {
       if (width >= 1024 && mobile === false) {
@@ -20,12 +31,16 @@ const Search: React.FC<Props> = ({ mobile }) => {
     }
     handelVisiblity()
   }, [mobile, width])
+
   return (
     <input
       ref={searchBox}
       type="text"
       placeholder="Search what you need!"
-      className="w-full border-b-2 border-dark-grey pb-1 outline-none transition-all ease-linear hover:border-opacity-100 focus:border-opacity-100 focus:shadow-xl sm:top-0 lg:w-3/4 xl:w-full "
+      className="input lg:w-3/4 xl:w-full "
+      onChange={(ev: React.ChangeEvent<HTMLInputElement>): void =>
+        setInputValue(ev.target.value)
+      }
     />
   )
 }

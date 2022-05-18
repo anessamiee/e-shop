@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import React from 'react'
 import { UrlObject } from 'url'
 
 declare type Url = string | UrlObject
@@ -13,38 +14,34 @@ type Props = {
   scroll?: boolean
 }
 
-const Button: React.FC<Props> = ({
-  children,
-  secondary,
-  className,
-  id,
-  onClick,
-  herf,
-  scroll,
-}) => {
-  const button =
-    'w-full select-none rounded-[10px] py-1 text-center transition duration-[300] ease-linear active:bg-opacity-90 '
-  const pri =
-    button +
-    'bg-blue text-light-grey hover:shadow-[0px_2px_30px_rgba(69,93,122,0.6)] ' +
-    className
+const Button = React.forwardRef<HTMLAnchorElement, Props>(
+  ({ children, secondary, className, id, onClick, herf, scroll }, ref) => {
+    const button =
+      'w-full select-none rounded-[10px] py-1 text-center transition duration-[300] ease-linear active:bg-opacity-90 '
+    const pri =
+      button +
+      'bg-blue text-light-grey hover:shadow-[0px_2px_30px_rgba(69,93,122,0.6)] ' +
+      className
 
-  const sec =
-    button +
-    'border-[2.5px] border-blue bg-white hover:shadow-[0px_2px_15px_rgba(69,93,122,0.6)] ' +
-    className
+    const sec =
+      button +
+      'border-[2.5px] border-blue bg-white hover:shadow-[0px_2px_15px_rgba(69,93,122,0.6)] ' +
+      className
 
-  return (
-    <Link href={`${herf !== undefined ? herf : '/'}`} scroll={scroll}>
-      <a
-        role={'button'}
-        className={`${secondary ? sec : pri}`}
-        id={id}
-        onClick={onClick}
-      >
-        {children}
-      </a>
-    </Link>
-  )
-}
+    return (
+      <Link href={`${herf !== undefined ? herf : '/'}`} scroll={scroll}>
+        <a
+          role={'button'}
+          className={`${secondary ? sec : pri}`}
+          id={id}
+          onClick={onClick}
+          ref={ref}
+        >
+          {children}
+        </a>
+      </Link>
+    )
+  }
+)
 export default Button
+Button.displayName

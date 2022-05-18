@@ -5,8 +5,10 @@
 @layer base {
   html,
   body {
-    height: 100vh;
-    min-height: 100vh;
+    /* height: 100vh;
+    min-height: 100vh; */
+    display: flex;
+    flex-direction: column;
     color: rgb(79, 79, 79);
     box-sizing: border-box;
     scroll-behavior: smooth;
@@ -17,6 +19,16 @@
   }
 }
 
+@layer components {
+  .input {
+    @apply w-full border-b-2 border-dark-grey pb-1 outline-none transition-all ease-linear hover:border-opacity-100 focus:border-opacity-100 focus:shadow-xl;
+  }
+}
+/* #__next {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+} */
 .slick-slide > div {
   margin: 0rem 1rem;
   margin-top: 2rem;

@@ -15,41 +15,25 @@ type Props = {
 const Home: NextPage<Props> = ({ products }) => {
   const marginTop = useNavHeight().navHeight
 
-  const scrollElementIntoView = (element: any) => {
-    let scrollTop = window.pageYOffset || element.scrollTop
-
-    // Furthermore, if you have for example a header outside the iframe
-    // you need to factor in its dimensions when calculating the position to scroll to
-    const headerOutsideIframe = marginTop
-
-    const finalOffset =
-      element.getBoundingClientRect().top + scrollTop + headerOutsideIframe
-
-    window.parent.scrollTo({
-      top: finalOffset,
-      behavior: 'smooth' || 'auto',
-    })
-  }
-
   useEffect(() => {
     landingAnimation()
   }, [])
 
+  const landingRef = useRef<HTMLDivElement>(null)
+  const landingHeaderRef = useRef<HTMLElement>(null)
+  const textRef = useRef<HTMLHeadingElement>(null)
+  const btnRef = useRef<HTMLAnchorElement>(null)
   const landingAnimation = () => {
-    var landing = document.getElementById('landing')
-    landing!.classList.remove('opacity-0')
-    landing!.classList.add('opacity-100')
-    var landingHeader = document.getElementById('landing-header')
-    landingHeader!.classList.add('bg-white')
-    var text = document.getElementById('h1')
-    text!.classList.remove('opacity-0')
-    text!.classList.add('opacity-100')
-    var btn = document.getElementById('btn')
-    btn!.classList.remove('opacity-0')
-    btn!.classList.add('opacity-100')
+    landingRef.current?.classList.remove('opacity-0')
+    landingRef.current?.classList.add('opacity-100')
+    landingHeaderRef.current?.classList.add('bg-white')
+    textRef.current?.classList.remove('opacity-0')
+    textRef.current?.classList.add('opacity-100')
+    btnRef.current?.classList.remove('opacity-0')
+    btnRef.current?.classList.add('opacity-100')
     setTimeout(() => {
-      btn!.classList.remove('sm:delay-[3s]')
-      btn!.classList.remove('delay-[2s]')
+      btnRef.current?.classList.remove('sm:delay-[3s]')
+      btnRef.current?.classList.remove('delay-[2s]')
     }, 3000)
   }
 
@@ -67,6 +51,7 @@ const Home: NextPage<Props> = ({ products }) => {
         }
         style={{}}
         id="landing"
+        ref={landingRef}
       >
         <div className="hidden select-none sm:block">
           <Image
@@ -84,10 +69,12 @@ const Home: NextPage<Props> = ({ products }) => {
         <header
           className="absolute left-0 top-0 bottom-1/2 flex w-full flex-col items-center justify-center rounded-lg px-8 duration-300 ease-linear sm:top-[20%] sm:w-auto sm:pl-16 sm:delay-[2s] xl:pr-8 xl:pl-40"
           id="landing-header"
+          ref={landingHeaderRef}
         >
           <h1
             className="mb-4 bg-white pb-2 text-[8vw] text-dark-blue opacity-0 transition-opacity duration-300 ease-linear selection:bg-dark-grey selection:text-light-grey sm:mb-0 sm:text-lg sm:delay-[2s] md:text-2xl md:leading-tight lg:pb-5 lg:text-4xl lg:leading-tight xl:text-5xl xl:leading-snug 2xl:text-7xl 2xl:leading-snug"
             id="h1"
+            ref={textRef}
           >
             Your one stop smart <br />
             shopping resource.
@@ -98,6 +85,7 @@ const Home: NextPage<Props> = ({ products }) => {
             id={'btn'}
             onClick={scrollToCarousel}
             scroll={false}
+            ref={btnRef}
           >
             Explore
           </Button>
@@ -109,28 +97,16 @@ const Home: NextPage<Props> = ({ products }) => {
         className="relative"
         style={{ scrollMarginTop: `${marginTop}px` }}
       >
-        <Carousel
-          // innerRef={carouselRef}
-          title="most popular products"
-        >
+        <Carousel title="most popular products">
           {ProductsList(products)}
         </Carousel>
-        <Carousel
-          // innerRef={carouselRef}
-          title="most popular products"
-        >
+        <Carousel title="most popular products">
           {ProductsList(products)}
         </Carousel>
-        <Carousel
-          // innerRef={carouselRef}
-          title="most popular products"
-        >
+        <Carousel title="most popular products">
           {ProductsList(products)}
         </Carousel>
       </div>
-      <h1 className=".js-show-on-scroll motion-safe:animate-fadeIn">
-        asdasdasdad
-      </h1>
     </>
   )
 }
