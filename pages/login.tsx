@@ -4,7 +4,6 @@ import Link from 'next/link'
 import Button from '../components/Button'
 import vector from '../assets/sign-in.svg'
 
-type Props = {}
 const LoginPage: NextPage = () => {
   return (
     <div className="flex w-full">

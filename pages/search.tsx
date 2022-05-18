@@ -2,6 +2,7 @@ import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
+import Meta from '../components/Meta'
 import ProductCard from '../components/ProductCard'
 import ProductsList from '../components/ProductsList'
 import { Product } from '../types'
@@ -32,9 +33,12 @@ const SearchPage: NextPage<{ products: Product[] }> = ({ products }) => {
     console.log(result)
   }, [result])
   return (
-    <div className="sm:px16 grid grid-cols-1 gap-5 p-8 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-      {result.length !== 0 ? ProductsList(result) : <div>Not Found</div>}
-    </div>
+    <>
+    <Meta title='Search'/>
+      <div className="sm:px16 grid grid-cols-1 gap-5 p-8 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
+        {result.length !== 0 ? ProductsList(result) : <div>Not Found</div>}
+      </div>
+    </>
   )
 }
 export default SearchPage
