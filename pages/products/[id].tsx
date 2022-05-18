@@ -16,6 +16,9 @@ import Carousel from '../../components/Carousel'
 import ProductsList from '../../components/ProductsList'
 import { RiArrowRightSFill } from 'react-icons/ri'
 import { useUser } from '@auth0/nextjs-auth0'
+import Modal from '../../components/Modal'
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 
 type Props = {
   product: Product
@@ -27,16 +30,21 @@ interface Params extends ParsedUrlQuery {
 
 const Product: NextPage<Props> = ({ product, relatedProducts }) => {
   const { user } = useUser()
+  const router = useRouter()
+  useEffect(() => {})
+  const [modal, setModal] = useState<boolean>(false)
   const handleButton = () => {
     if (user) {
       console.log('added')
     } else {
-      console.log('signin')
+      setModal(true)
     }
   }
+
   return (
     <>
       <Meta title={`${product.title}`} description={`${product.description}`} />
+      {modal && <Modal state={modal} setState={setModal} />}
       <div className="flex items-center px-8 pb-8 capitalize sm:px-16">
         <Link href={'/'}>
           <a className="transition-all hover:drop-shadow-lg">Home</a>
@@ -47,7 +55,6 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
             {product.category}
           </a>
         </Link>
-        {/* <div className="text-ellipsis line-clamp-1">{product.title}</div> */}
       </div>
       <div className="overflow-hiden relative flex w-full flex-col items-center justify-between px-8 sm:mb-16 sm:px-16 md:flex-row">
         <div className="block w-2/3 md:w-1/3 lg:w-2/5">
@@ -80,6 +87,7 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
           <Button
             className="my-8 justify-self-end lg:mt-auto xl:py-2 xl:text-xl"
             onClick={handleButton}
+            herf={router.asPath}
           >
             Buy Now!
           </Button>

@@ -1,17 +1,10 @@
 import Link from 'next/link'
-import { useEffect } from 'react'
 import { AiOutlineUser } from 'react-icons/ai'
 import Button from '../Button'
 import { useUser } from '@auth0/nextjs-auth0'
-import useWindowDimensions from '../../hooks/useWindowDimensions'
 
 const UserCard: React.FC = () => {
   const { user } = useUser()
-  const { innerWidth } = useWindowDimensions()
-  useEffect(() => {
-    console.log(user)
-  }, [user])
-
   const logedIn = (
     <>
       <AiOutlineUser className="rounded-full border-2 text-3xl transition-all sm:text-4xl " />
@@ -42,12 +35,8 @@ const UserCard: React.FC = () => {
       </section>
     </>
   )
-  const mobile =
-    'fixed left-0 top-0 translate-y-44 z-20 flex w-full gap-3 flex-col items-center bg-white pb-16 px-8'
-  const desktop =
-    'fixed right-[8.65rem] z-20 mt-8 flex w-48 flex-col items-center justify-center gap-3 rounded-[20px] bg-white py-8 px-4 drop-shadow-2xl'
   return (
-    <div className={innerWidth >= 640 ? desktop : mobile}>
+    <div className="sm fixed right-0 top-0 z-20 flex w-full translate-y-44 flex-col items-center gap-3 bg-white px-8 pb-16 sm:top-auto sm:right-[8.65rem] sm:mt-8 sm:w-48 sm:translate-y-0 sm:justify-center sm:rounded-[20px] sm:py-8 sm:px-4 sm:drop-shadow-2xl ">
       <div className="absolute -top-2 -z-10 h-8 w-8 rotate-45 bg-white" />
       {user ? logedIn : notLogedIn}
     </div>
