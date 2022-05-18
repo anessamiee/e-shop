@@ -1,4 +1,4 @@
-import type { GetServerSideProps, GetStaticProps, NextPage } from 'next'
+import type { GetStaticProps, NextPage } from 'next'
 import Image from 'next/image'
 import { useEffect, useRef, useState } from 'react'
 import Button from '../components/Button'
