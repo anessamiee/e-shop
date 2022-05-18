@@ -15,6 +15,7 @@ import Link from 'next/link'
 import Carousel from '../../components/Carousel'
 import ProductsList from '../../components/ProductsList'
 import { RiArrowRightSFill } from 'react-icons/ri'
+import { useUser } from '@auth0/nextjs-auth0'
 
 type Props = {
   product: Product
@@ -25,6 +26,14 @@ interface Params extends ParsedUrlQuery {
 }
 
 const Product: NextPage<Props> = ({ product, relatedProducts }) => {
+  const { user } = useUser()
+  const handleButton = () => {
+    if (user) {
+      console.log('added')
+    } else {
+      console.log('signin')
+    }
+  }
   return (
     <>
       <Meta title={`${product.title}`} description={`${product.description}`} />
@@ -68,7 +77,10 @@ const Product: NextPage<Props> = ({ product, relatedProducts }) => {
             <h4 className='text-xl before:content-["$"]'>{product.price}</h4>
           </section>
           <p className="xl:text-md">{product.description}</p>
-          <Button className="my-8 justify-self-end lg:mt-auto xl:py-2 xl:text-xl">
+          <Button
+            className="my-8 justify-self-end lg:mt-auto xl:py-2 xl:text-xl"
+            onClick={handleButton}
+          >
             Buy Now!
           </Button>
         </div>

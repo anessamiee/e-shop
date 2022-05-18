@@ -6,17 +6,16 @@ import { BsArrowRightShort } from 'react-icons/bs'
 import Link from 'next/link'
 import Search from './Search'
 import axios from 'axios'
-import useNavHeight from '../../hooks/useNavHeight'
 import { useRouter } from 'next/router'
 import UserCard from './UserCard'
-import Pages from './Pages'
+import { useUser } from '@auth0/nextjs-auth0'
 
 const Nav: React.FC = () => {
   const [menu, setMenu] = useState<boolean>(false)
   const [userCard, setUserCard] = useState(false)
   const [categories, setCategories] = useState<string[]>([])
-  const navHeight = useNavHeight().navHeight
   const router = useRouter()
+  const { user } = useUser()
 
   useEffect(() => {
     axios('https://fakestoreapi.com/products/categories').then((res) => {
@@ -45,9 +44,11 @@ const Nav: React.FC = () => {
 
   const handleMenu = () => {
     setMenu(!menu)
+    setUserCard(false)
   }
   const handleUserCard = () => {
     setUserCard(!userCard)
+    setMenu(false)
   }
   useEffect(() => {
     router.events.on('routeChangeComplete', () => setUserCard(false))
@@ -75,7 +76,7 @@ const Nav: React.FC = () => {
                 className="rounded-full text-3xl transition-all sm:text-4xl"
                 onClick={handleUserCard}
               />
-              {userCard && <UserCard login={false} />}
+              {userCard && <UserCard />}
             </li>
             <li id="cart">
               <div className="group relative">
@@ -91,7 +92,6 @@ const Nav: React.FC = () => {
               <BsList
                 className="text-3xl transition-all hover:text-blue sm:text-4xl"
                 onClick={handleMenu}
-                // onMouseEnter={handleMenu}
               />
             </li>
           </ul>
@@ -155,18 +155,6 @@ const Nav: React.FC = () => {
                     }
                   >
                     Contact Us
-                  </a>
-                </Link>
-              </li>
-              <li>
-                <Link href={'/mockup'}>
-                  <a
-                    className="hover:underline hover:drop-shadow-xl"
-                    onClick={() =>
-                      router.events.on('routeChangeComplete', handleMenu)
-                    }
-                  >
-                    Mock Up Users
                   </a>
                 </Link>
               </li>

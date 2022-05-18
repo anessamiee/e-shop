@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { GetStaticProps, NextPage } from 'next'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import ProductCard from '../components/ProductCard'
 import ProductsList from '../components/ProductsList'
 import { Product } from '../types'
@@ -11,12 +11,29 @@ const SearchPage: NextPage<{ products: Product[] }> = ({ products }) => {
   const {
     query: { title },
   } = router
-
+  const [result, setResult] = useState<Product[]>([])
+  useEffect(() => {
+    const stringIncludes = (str1: string, str2: string): boolean => {
+      if (str1.toLowerCase().includes(str2.toLowerCase())) {
+        return true
+      } else {
+        return false
+      }
+    }
+    setResult([])
+    products.map((product) => {
+      if (stringIncludes(product.title, title as string)) {
+        setResult((result) => [...result, product])
+      }
+    })
+    console.log(title)
+  }, [products, title])
+  useEffect(() => {
+    console.log(result)
+  }, [result])
   return (
     <div className="sm:px16 grid grid-cols-1 gap-5 p-8 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5">
-      {products.map(() => {
-        <div className="text-5xl">not found</div>
-      })}
+      {result.length !== 0 ? ProductsList(result) : <div>Not Found</div>}
     </div>
   )
 }
