@@ -40,4 +40,4 @@ const Profile: NextPage = () => {
 }
 export default Profile
 
-export const getStaticProps = withPageAuthRequired()
+export const getServerSideProps = withPageAuthRequired()
